@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Entrar — VáDeBicicleta</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<a class="pular" href="#conteudo">Ir para o conteúdo</a>
+	<main class="entrada-grade">
+		<section class="apresentacao">
+			<p class="marca">
+				<svg class="icone" viewBox="0 0 64 40" aria-hidden="true">
+					<g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+						<circle cx="14" cy="28" r="8"></circle>
+						<circle cx="50" cy="28" r="8"></circle>
+						<path d="M14 28h16l8-16h10M30 28l8-16M24 12h14M48 12l2 16"></path>
+					</g>
+				</svg>
+				<span>VáDeBicicleta</span>
+			</p>
+			<p class="chamada">A cidade fica mais perto de bicicleta.</p>
+			<p>Use um totem, informe a tranca e siga o trajeto. O pagamento desta etapa é só uma simulação.</p>
+			<svg class="ilustracao" viewBox="0 0 360 220" role="img" aria-label="Ilustração de uma bicicleta em um caminho">
+				<circle cx="292" cy="46" r="22" fill="#f6d36b"></circle>
+				<path d="M24 176h312" stroke="#d7f5e4" stroke-width="4" stroke-linecap="round"></path>
+				<g fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+					<circle cx="118" cy="150" r="34"></circle>
+					<circle cx="246" cy="150" r="34"></circle>
+					<path d="M118 150h58l28-48h36M176 150l28-48M176 102h28M240 102l6 48"></path>
+				</g>
+				<path d="M240 102l18-10" stroke="#f6d36b" stroke-width="7" stroke-linecap="round"></path>
+			</svg>
+		</section>
+		<section class="painel-form" id="conteudo">
+			<div class="cartao-form">
+				<h1>Entrar</h1>
+				<p class="etapa">Acesse com o e-mail do seu cadastro.</p>
+				<p id="mensagem-formulario" class="aviso" role="alert"></p>
+				<form id="formulario-login" novalidate>
+					<div class="campo">
+						<label for="email">E-mail</label>
+						<input id="email" name="email" type="email" autocomplete="username" inputmode="email" aria-describedby="erro-email" required>
+						<p id="erro-email" class="erro-campo" role="alert"></p>
+					</div>
+					<div class="campo">
+						<label for="senha">Senha</label>
+						<input id="senha" name="senha" type="password" autocomplete="current-password" aria-describedby="erro-senha" required>
+						<p id="erro-senha" class="erro-campo" role="alert"></p>
+					</div>
+					<button id="botao-entrar" type="submit">Entrar</button>
+				</form>
+				<p class="acao-secundaria"><a href="cadastro.html">Criar cadastro</a></p>
+			</div>
+		</section>
+	</main>
+	<script src="comum.js"></script>
+	<script src="login.js"></script>
+</body>
+</html>

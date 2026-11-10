@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Alugar bicicleta — VáDeBicicleta</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<a class="pular" href="#conteudo">Ir para o conteúdo</a>
+	<header class="topo">
+		<a class="marca" href="inicio.html">
+			<svg class="icone" viewBox="0 0 64 40" aria-hidden="true">
+				<g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+					<circle cx="14" cy="28" r="8"></circle>
+					<circle cx="50" cy="28" r="8"></circle>
+					<path d="M14 28h16l8-16h10M30 28l8-16M24 12h14M48 12l2 16"></path>
+				</g>
+			</svg>
+			<span>VáDeBicicleta</span>
+		</a>
+		<input id="abrir-menu" class="abrir-menu" type="checkbox">
+		<label for="abrir-menu" class="menu-botao">Menu</label>
+		<nav class="nav-principal" aria-label="Principal">
+			<a href="inicio.html">Início</a>
+			<a href="editar.html">Meu cadastro</a>
+			<a href="cartao.html">Cartão</a>
+			<a href="alugar.html" aria-current="page">Alugar</a>
+			<a href="confirmacoes.html">Confirmações</a>
+		</nav>
+		<button id="botao-sair" class="botao-sair" type="button">Sair</button>
+	</header>
+	<main class="conteudo" id="conteudo">
+		<h1>Alugar bicicleta</h1>
+		<p class="etapa">A tranca abre na simulação somente depois do pagamento aprovado.</p>
+		<section id="taxa" class="resumo-taxa" aria-live="polite">Carregando a taxa...</section>
+		<h2>Totens</h2>
+		<div id="totens" class="grade-totens"></div>
+		<p id="mensagem-formulario" class="aviso" role="alert"></p>
+		<form id="formulario-aluguel" class="conteudo-estreito" novalidate>
+			<div id="resumo-confirmacao" class="resumo-taxa">O valor confirmado pelo sistema aparece aqui.</div>
+			<div class="campo">
+				<label for="numeroTranca">Número da tranca</label>
+				<input id="numeroTranca" name="numeroTranca" type="text" maxlength="20" autocomplete="off" aria-describedby="ajuda-tranca tranca-escolhida erro-numeroTranca" required>
+				<p id="tranca-escolhida" class="ajuda">Nenhuma tranca selecionada.</p>
+				<p id="ajuda-tranca" class="ajuda">Toque em uma tranca da lista ou digite o número.</p>
+				<p id="erro-numeroTranca" class="erro-campo" role="alert"></p>
+			</div>
+			<button id="botao-confirmar" type="submit">Confirmar aluguel</button>
+		</form>
+		<div id="resultado" class="resultado" role="status" hidden></div>
+		<p class="acao-secundaria"><a href="inicio.html">Voltar ao início</a></p>
+	</main>
+	<script src="comum.js"></script>
+	<script src="alugar.js"></script>
+</body>
+</html>
