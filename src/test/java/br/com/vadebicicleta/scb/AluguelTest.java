@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,9 +21,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
@@ -42,6 +49,7 @@ import br.com.vadebicicleta.scb.aluguel.NotificacaoSimulada;
 import br.com.vadebicicleta.scb.aluguel.ResultadoCobranca;
 import br.com.vadebicicleta.scb.aluguel.StatusAluguel;
 import br.com.vadebicicleta.scb.aluguel.StatusBicicleta;
+import br.com.vadebicicleta.scb.aluguel.Totem;
 import br.com.vadebicicleta.scb.aluguel.TotemRepository;
 import br.com.vadebicicleta.scb.aluguel.Tranca;
 import br.com.vadebicicleta.scb.aluguel.TrancaRepository;
@@ -103,6 +111,48 @@ class AluguelTest {
 		assertEquals(40, this.bicicletas.count());
 		assertEquals(StatusBicicleta.EM_USO, this.bicicletas.findById(bicicleta.getId()).orElseThrow().getStatus());
 		assertNull(this.bicicletas.findById(bicicleta.getId()).orElseThrow().getTranca());
+	}
+
+	@Test
+	void nomeDoTotemNaoPodeRepetir() {
+		Totem repetido = new Totem();
+		repetido.setNome("Totem Praça Central");
+		repetido.setCapacidade(20);
+		assertThrows(DataIntegrityViolationException.class, () -> this.totens.saveAndFlush(repetido));
+	}
+
+	@Test
+	void duasExecucoesSimultaneasNaoDuplicamTotens() throws Exception {
+		ExecutorService pool = Executors.newFixedThreadPool(2);
+		CountDownLatch prontos = new CountDownLatch(2);
+		CountDownLatch seguir = new CountDownLatch(1);
+		try {
+			Future<?> uma = pool.submit(() -> executar(prontos, seguir));
+			Future<?> outra = pool.submit(() -> executar(prontos, seguir));
+			assertTrue(prontos.await(5, TimeUnit.SECONDS));
+			seguir.countDown();
+			uma.get(5, TimeUnit.SECONDS);
+			outra.get(5, TimeUnit.SECONDS);
+		}
+		finally {
+			pool.shutdownNow();
+		}
+		assertEquals(2, this.totens.count());
+		assertEquals(40, this.trancas.count());
+	}
+
+	private void executar(CountDownLatch prontos, CountDownLatch seguir) {
+		prontos.countDown();
+		try {
+			if (!seguir.await(5, TimeUnit.SECONDS)) {
+				throw new IllegalStateException("A outra execucao nao iniciou.");
+			}
+		}
+		catch (InterruptedException ex) {
+			Thread.currentThread().interrupt();
+			throw new IllegalStateException("A execucao foi interrompida.", ex);
+		}
+		this.dadosIniciais.run(null);
 	}
 
 	@Test

@@ -11,16 +11,27 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ScbApplication {
 
 	static {
-		criarPasta("dados");
-		criarPasta("logs");
+		// No perfil prod o banco e o log nao ficam em arquivo.
+		if (!perfilProd()) {
+			criarPasta("dados");
+			criarPasta("logs");
+		}
 	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(ScbApplication.class, args);
 	}
 
+	private static boolean perfilProd() {
+		String perfis = System.getenv("SPRING_PROFILES_ACTIVE");
+		if (perfis == null) {
+			perfis = System.getProperty("spring.profiles.active");
+		}
+		return perfis != null && perfis.contains("prod");
+	}
+
 	/**
-	 * O H2 grava o banco em ./dados e o log fica em ./logs.
+	 * O H2 grava o banco em ./dados e o log local fica em ./logs.
 	 * As pastas precisam existir antes da conexao e do primeiro registro.
 	 */
 	private static void criarPasta(String nome) {

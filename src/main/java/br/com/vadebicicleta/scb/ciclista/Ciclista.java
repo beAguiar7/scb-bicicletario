@@ -41,11 +41,13 @@ public class Ciclista {
 	private String senhaHash;
 
 	/**
-	 * Conteudo da foto. Fica no banco e nao entra nas respostas do cadastro.
+	 * Conteudo da foto. Nao entra nas respostas.
+	 * VARBINARY vira bytea no PostgreSQL e varbinary no H2.
+	 * BLOB no PostgreSQL usaria oid, que nao serve para esta foto.
 	 */
 	@JsonIgnore
-	@JdbcTypeCode(SqlTypes.BLOB)
-	@Column(nullable = false)
+	@JdbcTypeCode(SqlTypes.VARBINARY)
+	@Column(nullable = false, length = 5_242_880)
 	private byte[] fotoDocumento;
 
 	public Long getId() {

@@ -37,11 +37,22 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		<!-- Banco H2. O console web fica de fora de proposito. -->
+		<!-- Banco H2. O console web fica de fora de proposito. Usado na execucao local. -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+		<!-- PostgreSQL somente no perfil prod. A versao vem do Spring Boot. -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- Sessao JDBC no perfil prod. Continua sendo sessao, nao JWT. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-session-jdbc</artifactId>
 		</dependency>
 
 		<dependency>

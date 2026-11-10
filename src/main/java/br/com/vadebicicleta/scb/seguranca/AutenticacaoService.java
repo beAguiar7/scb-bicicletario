@@ -48,17 +48,26 @@ public class AutenticacaoService {
 		catch (org.springframework.security.core.AuthenticationException ex) {
 			throw ErroDeNegocio.credenciaisInvalidas();
 		}
+		Authentication paraGuardar = paraSessao(autenticacao);
 		if (autenticacao instanceof CredentialsContainer container) {
 			container.eraseCredentials();
 		}
 
 		SecurityContext contexto = SecurityContextHolder.createEmptyContext();
-		contexto.setAuthentication(autenticacao);
+		contexto.setAuthentication(paraGuardar);
 		SecurityContextHolder.setContext(contexto);
 		request.getSession(true);
-		this.renovacaoDeSessao.onAuthentication(autenticacao, request, response);
+		this.renovacaoDeSessao.onAuthentication(paraGuardar, request, response);
 		this.securityContextRepository.saveContext(contexto, request, response);
-		return this.ciclistaService.consultarPorEmail(autenticacao.getName());
+		return this.ciclistaService.consultarPorEmail(paraGuardar.getName());
+	}
+
+	/**
+	 * A sessao JDBC grava o objeto em bytes. Este principal so tem o e-mail.
+	 */
+	static Authentication paraSessao(Authentication autenticada) {
+		CiclistaAutenticado principal = new CiclistaAutenticado(autenticada.getName());
+		return new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
 	}
 
 }

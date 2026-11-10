@@ -9,9 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.context.ApplicationContext;
+import org.springframework.session.SessionRepository;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -28,6 +31,9 @@ class ScbApplicationTests {
 
 	@Autowired
 	private DataSource dataSource;
+
+	@Autowired
+	private ApplicationContext contexto;
 
 	@Test
 	void contextLoads() {
@@ -62,6 +68,11 @@ class ScbApplicationTests {
 		this.mockMvc.perform(get("/inicio.html"))
 				.andExpect(status().isOk())
 				.andExpect(content().string(containsString("Sair")));
+	}
+
+	@Test
+	void perfilLocalNaoGravaSessaoNoBanco() {
+		assertEquals(0, this.contexto.getBeanNamesForType(SessionRepository.class).length);
 	}
 
 	@Test

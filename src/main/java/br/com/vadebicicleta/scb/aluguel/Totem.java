@@ -6,9 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "totem")
+@Table(name = "totem", uniqueConstraints = @UniqueConstraint(name = "uk_totem_nome", columnNames = "nome"))
 public class Totem {
 
 	@Id
