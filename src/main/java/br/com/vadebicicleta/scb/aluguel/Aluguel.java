@@ -68,6 +68,19 @@ public class Aluguel {
 	@Column(nullable = false, unique = true, length = 80)
 	private String chave;
 
+	/**
+	 * Horario de devolucao gravado no servidor. Nulo enquanto o aluguel esta ativo.
+	 */
+	private LocalDateTime fim;
+
+	@ManyToOne
+	@JoinColumn(name = "tranca_devolucao_id")
+	private Tranca trancaDevolucao;
+
+	@ManyToOne
+	@JoinColumn(name = "totem_devolucao_id")
+	private Totem totemDevolucao;
+
 	public Long getId() {
 		return this.id;
 	}
@@ -158,6 +171,30 @@ public class Aluguel {
 
 	public void setChave(String chave) {
 		this.chave = chave;
+	}
+
+	public LocalDateTime getFim() {
+		return this.fim;
+	}
+
+	public void setFim(LocalDateTime fim) {
+		this.fim = fim;
+	}
+
+	public Tranca getTrancaDevolucao() {
+		return this.trancaDevolucao;
+	}
+
+	public void setTrancaDevolucao(Tranca trancaDevolucao) {
+		this.trancaDevolucao = trancaDevolucao;
+	}
+
+	public Totem getTotemDevolucao() {
+		return this.totemDevolucao;
+	}
+
+	public void setTotemDevolucao(Totem totemDevolucao) {
+		this.totemDevolucao = totemDevolucao;
 	}
 
 }

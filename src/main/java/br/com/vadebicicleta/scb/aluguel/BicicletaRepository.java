@@ -13,6 +13,14 @@ public interface BicicletaRepository extends JpaRepository<Bicicleta, Long> {
 
 	boolean existsByTrancaAndStatus(Tranca tranca, StatusBicicleta status);
 
+	Optional<Bicicleta> findByTranca(Tranca tranca);
+
+	Optional<Bicicleta> findByRfid(String rfid);
+
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@Query("select b from Bicicleta b where b.rfid = :rfid")
+	Optional<Bicicleta> findByRfidComBloqueio(@Param("rfid") String rfid);
+
 	Optional<Bicicleta> findByTrancaAndStatus(Tranca tranca, StatusBicicleta status);
 
 	@Lock(LockModeType.PESSIMISTIC_WRITE)

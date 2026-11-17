@@ -29,8 +29,11 @@ public class Bicicleta {
 	@Column(nullable = false, length = 20)
 	private StatusBicicleta status;
 
+	/**
+	 * Uma bicicleta por tranca. Fica nulo enquanto a bicicleta esta em uso.
+	 */
 	@ManyToOne
-	@JoinColumn(name = "tranca_id")
+	@JoinColumn(name = "tranca_id", unique = true)
 	private Tranca tranca;
 
 	public Long getId() {

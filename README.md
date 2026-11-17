@@ -2,7 +2,7 @@
 
 Trabalho acadêmico do quarto período de Ciência da Computação. O nome da aplicação é **VáDeBicicleta**.
 
-A Sprint 1 cobre cadastro, login, sessão, BCrypt, CSRF e o registro de falhas. A Sprint 2 acrescenta a alteração do próprio cadastro, o cartão de demonstração, o aluguel pelo número da tranca e a confirmação simulada de empréstimo. Devolução, taxas extras e cobrança pendente não fazem parte desta etapa.
+A Sprint 1 cobre cadastro, login, sessão, BCrypt, CSRF e o registro de falhas. A Sprint 2 acrescenta a alteração do próprio cadastro, o cartão de demonstração, o aluguel pelo número da tranca e a confirmação simulada de empréstimo. A devolução em uma tranca livre faz parte da HU06. A taxa extra dessa devolução faz parte da HU07. O reprocessamento da pendência faz parte da HU08. O e-mail de devolução ainda não faz parte desta etapa.
 
 O envio real de e-mail e o aplicativo móvel não estão concluídos. A verificação visual no navegador também continua pendente.
 
@@ -68,11 +68,25 @@ A taxa básica desta etapa é **R$ 10,00 por 2 horas**. O PDF do trabalho não d
 ```properties
 scb.aluguel.valor=10.00
 scb.aluguel.duracao-horas=2
+scb.aluguel.taxa-extra=2.50
+scb.aluguel.bloco-minutos=30
 ```
 
 O cálculo usa `BigDecimal` no servidor. A tela mostra a taxa antes da confirmação. O aluguel exige sessão e um cartão de demonstração já cadastrado. O ciclista informa o número da tranca. Só depois do pagamento simulado aprovado a bicicleta passa a `EM_USO`, a tranca fica sem bicicleta e o aluguel ativo é gravado. Na recusa, bicicleta e tranca não mudam, e a cobrança fica registrada como `RECUSADO`.
 
-Cada ciclista pode ter apenas um aluguel ativo. Duas confirmações ao mesmo tempo não retiram a mesma bicicleta nem criam dois aluguéis para o mesmo ciclista. Repetir a mesma confirmação, identificada pela chave enviada pela tela, não gera outra cobrança, outro aluguel nem outra mensagem. Não há devolução nesta sprint.
+Cada ciclista pode ter apenas um aluguel ativo. Duas confirmações ao mesmo tempo não retiram a mesma bicicleta nem criam dois aluguéis para o mesmo ciclista. Repetir a mesma confirmação, identificada pela chave enviada pela tela, não gera outra cobrança, outro aluguel nem outra mensagem.
+
+## Devolução no totem simulado
+
+`POST /api/devolucoes` recebe o RFID e o número da tranca, como `PC-01` ou `CN-01`. O totem simulado não exige login. O CSRF continua obrigatório, e as demais rotas seguem exigindo sessão. A resposta traz a tranca e o horário, sem dados do ciclista.
+
+A bicicleta pode voltar para uma tranca livre de qualquer totem. Na mesma transação o aluguel é encerrado, o horário é gravado no servidor e a bicicleta fica disponível nessa tranca. Repetir a mesma leitura, com a bicicleta ainda nessa tranca e sem novo aluguel, devolve o mesmo horário e não cria outro registro. A tela é `totem.html`.
+
+A duração usa o início do aluguel e o horário da devolução, os dois gravados no servidor. Até 2 horas não há taxa extra. Depois disso, cada bloco de 30 minutos iniciado custa R$ 2,50, inclusive quando o bloco está só começado. Os dois valores ficam em `application.properties`. Há no máximo uma taxa extra por aluguel, com valor, horário e situação `PAGA` ou `PENDENTE`. O pagamento reutiliza o cartão de demonstração: aprovado fica `PAGA` e recusado fica `PENDENTE`. A recusa não desfaz a devolução. A resposta do totem mostra o valor e a situação, sem ciclista nem cartão, e informa que o pagamento é simulado. Repetir a leitura devolve essa mesma taxa, sem calcular nem cobrar de novo. O e-mail da devolução fica fora desta etapa.
+
+## Reprocessar taxa extra
+
+O ciclista autenticado consulta somente as próprias pendências em `GET /api/taxas-extras`. `POST /api/taxas-extras/{id}/pagamento` exige sessão e CSRF. O pagamento usa o cartão de demonstração cadastrado no momento e o valor já gravado na HU07. Se o simulador aprova, a mesma taxa passa para `PAGA`. Se recusa, continua `PENDENTE`. Sem cartão, a pendência permanece e a resposta pede o cadastro. Se a taxa já está `PAGA`, a resposta devolve o estado atual e o simulador não é chamado. A tentativa grava horário e resultado, sem dados do cartão. A devolução e a bicicleta não mudam. A tela logada é `taxas.html`.
 
 ## Confirmação simulada
 
@@ -147,6 +161,8 @@ Com a aplicação em execução, na porta 8080:
 - Cartão de demonstração: [http://localhost:8080/cartao.html](http://localhost:8080/cartao.html)
 - Alugar bicicleta: [http://localhost:8080/alugar.html](http://localhost:8080/alugar.html)
 - Aluguel ativo: [http://localhost:8080/aluguel.html](http://localhost:8080/aluguel.html)
+- Totem simulado: [http://localhost:8080/totem.html](http://localhost:8080/totem.html)
+- Taxas extras: [http://localhost:8080/taxas.html](http://localhost:8080/taxas.html)
 - Confirmações: [http://localhost:8080/confirmacoes.html](http://localhost:8080/confirmacoes.html)
 - Status: [http://localhost:8080/api/status](http://localhost:8080/api/status)
 
@@ -207,7 +223,7 @@ Nesta máquina não há Docker, então a imagem não foi construída. O cliente 
 
 ## Limites desta etapa
 
-- Não há devolução, taxa extra nem cobrança pendente.
+- O e-mail da devolução não é enviado.
 - O cartão e o pagamento são simulação local. Nenhuma cobrança externa é feita.
 - A confirmação fica só na caixa de saída do banco da aplicação. O envio real de e-mail não está concluído.
 - As telas são um protótipo web. O requisito de aplicativo móvel não está concluído.

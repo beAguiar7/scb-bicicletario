@@ -365,7 +365,8 @@ select {
 	color: var(--texto);
 }
 
-#numeroTranca {
+#numeroTranca,
+#rfid {
 	font-size: 1.25rem;
 	font-weight: 700;
 	letter-spacing: 0.04em;
@@ -401,6 +402,19 @@ form button[type="submit"],
 button:disabled {
 	opacity: 0.65;
 	cursor: wait;
+}
+
+.botao-pagar {
+	width: 100%;
+	margin-top: 0.9rem;
+	padding: 0.8rem 1rem;
+	background: var(--verde);
+	color: #ffffff;
+	font-weight: 800;
+}
+
+.resultado-pagamento {
+	margin-top: 0.8rem;
 }
 
 .acao-secundaria {
@@ -617,6 +631,10 @@ dd {
 	background: var(--branco);
 	color: var(--texto);
 	box-shadow: none;
+}
+
+.resultado .selo {
+	margin-top: 0.8rem;
 }
 
 .selo {

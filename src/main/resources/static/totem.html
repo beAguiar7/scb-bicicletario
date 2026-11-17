@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Totem — VáDeBicicleta</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<a class="pular" href="#conteudo">Ir para o conteúdo</a>
+	<header class="topo">
+		<a class="marca" href="index.html">
+			<svg class="icone" viewBox="0 0 64 40" aria-hidden="true">
+				<g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+					<circle cx="14" cy="28" r="8"></circle>
+					<circle cx="50" cy="28" r="8"></circle>
+					<path d="M14 28h16l8-16h10M30 28l8-16M24 12h14M48 12l2 16"></path>
+				</g>
+			</svg>
+			<span>VáDeBicicleta</span>
+		</a>
+	</header>
+	<main class="conteudo" id="conteudo">
+		<h1>Totem simulado</h1>
+		<p class="etapa">Devolva a bicicleta em uma tranca livre. Não é preciso entrar na conta.</p>
+		<p class="aviso">A leitura fica nesta aplicação. Depois de 2 horas, a taxa extra é calculada e o pagamento é simulado. A pendência não é reprocessada aqui, e nenhum e-mail é enviado.</p>
+		<p id="mensagem-formulario" class="aviso" role="alert"></p>
+		<form id="formulario-devolucao" class="conteudo-estreito" novalidate>
+			<div class="campo">
+				<label for="rfid">RFID da bicicleta</label>
+				<input id="rfid" name="rfid" type="text" maxlength="40" autocomplete="off" aria-describedby="ajuda-rfid erro-rfid" required>
+				<p id="ajuda-rfid" class="ajuda">Exemplo: RFID-PC-01.</p>
+				<p id="erro-rfid" class="erro-campo" role="alert"></p>
+			</div>
+			<div class="campo">
+				<label for="numeroTranca">Número da tranca</label>
+				<input id="numeroTranca" name="numeroTranca" type="text" maxlength="20" autocomplete="off" aria-describedby="ajuda-tranca erro-numeroTranca" required>
+				<p id="ajuda-tranca" class="ajuda">Exemplo: PC-01 ou CN-01. A tranca precisa estar livre.</p>
+				<p id="erro-numeroTranca" class="erro-campo" role="alert"></p>
+			</div>
+			<button id="botao-devolver" type="submit">Registrar devolução</button>
+		</form>
+		<div id="resultado" class="resultado" role="status" hidden></div>
+	</main>
+	<script src="comum.js"></script>
+	<script src="totem.js"></script>
+</body>
+</html>

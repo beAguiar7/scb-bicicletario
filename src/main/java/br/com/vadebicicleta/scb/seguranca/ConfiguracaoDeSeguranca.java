@@ -52,6 +52,7 @@ public class ConfiguracaoDeSeguranca {
 						.requestMatchers(HttpMethod.GET, "/", "/*.html", "/*.css", "/*.js", "/favicon.ico").permitAll()
 						.requestMatchers(HttpMethod.GET, "/api/status", "/api/csrf").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/ciclistas", "/api/login", "/api/logout").permitAll()
+						.requestMatchers(HttpMethod.POST, "/api/devolucoes").permitAll()
 						.requestMatchers("/h2-console", "/h2-console/**").denyAll()
 						.requestMatchers("/error").permitAll()
 						.anyRequest().authenticated())

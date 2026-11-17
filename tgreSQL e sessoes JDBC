@@ -1,0 +1,18 @@
+ .dockerignore                                      | 24 [32m+++++++++[m
+ Dockerfile.vercel                                  | 15 [32m++++++[m
+ README.md                                          | 59 [32m+++++++++++++++++++[m[31m---[m
+ pom.xml                                            | 13 [32m++++[m[31m-[m
+ .../br/com/vadebicicleta/scb/ScbApplication.java   | 17 [32m+++++[m[31m--[m
+ .../vadebicicleta/scb/SessaoJdbcSomenteProd.java   | 35 [32m+++++++++++++[m
+ .../vadebicicleta/scb/aluguel/DadosIniciais.java   | 35 [32m+++++++++++[m[31m--[m
+ .../br/com/vadebicicleta/scb/aluguel/Totem.java    |  3 [32m+[m[31m-[m
+ .../com/vadebicicleta/scb/ciclista/Ciclista.java   |  8 [32m+[m[31m--[m
+ .../scb/seguranca/AutenticacaoService.java         | 15 [32m++++[m[31m--[m
+ .../scb/seguranca/CiclistaAutenticado.java         | 39 [32m++++++++++++++[m
+ src/main/resources/META-INF/spring.factories       |  1 [32m+[m
+ src/main/resources/application-prod.properties     | 29 [32m+++++++++++[m
+ src/main/resources/application.properties          |  4 [32m+[m[31m-[m
+ .../java/br/com/vadebicicleta/scb/AluguelTest.java | 50 [32m++++++++++++++++++[m
+ .../com/vadebicicleta/scb/ScbApplicationTests.java | 11 [32m++++[m
+ .../scb/seguranca/PrincipalDaSessaoTest.java       | 52 [32m+++++++++++++++++++[m
+ 17 files changed, 387 insertions(+), 23 deletions(-)
